@@ -1,6 +1,8 @@
 SQLDump
 =======
 
+[Download SQLDump-0.2.jar](https://github.com/downloads/aparsons/SQLDump/SQLDump-0.2.jar)
+
 Command line utility to execute SQL queries and export results to a CSV file
 
 Currently only supports Oracle and MySQL. For additional driver support please contact me or fork the project.
