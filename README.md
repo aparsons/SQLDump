@@ -11,8 +11,9 @@ Usage
 -----
 
 ```java
-java -jar SQLDump.jar -url [jdbc:oracle:thin:@hostname:port:sid] -user [username] -pass [password] -sql [query]
+java -jar SQLDump-0.2.jar -url [jdbc:oracle:thin:@hostname:port:sid] -user [username] -pass [password] -sql [query]
 ```
+Remember to enclose your SQL query with quotes!
 
 ### Required
 
