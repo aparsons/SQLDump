@@ -11,6 +11,8 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.io.FileUtils;
+
 import au.com.bytecode.opencsv.CSVWriter;
 
 import net.aparsons.sqldump.db.Connectors.Connector;
@@ -18,7 +20,7 @@ import net.aparsons.sqldump.db.Connectors.Connector;
 
 public final class SQLDump implements Runnable {
 
-	public static final String VERSION = "0.2";
+	public static final String VERSION = "0.3";
 	
 	private final Connector driver;
 	private final String url, username, password, sql;
@@ -61,18 +63,27 @@ public final class SQLDump implements Runnable {
 			if (conn != null) {
 				Logger.getLogger(SQLDump.class.getName()).log(Level.INFO, "Successfully connected to database [" + url + "]");
 				
+				// Init Files
+				if (file == null) {
+					file = new File(Long.toString(System.currentTimeMillis()) + ".csv");
+				}
+				
+				if (file.exists()) {
+					throw new IOException("File already exists [" + file.getName() + "]");
+				}
+				
+				File tempFile = new File(file + ".tmp");
+
+				if (file.exists()) {
+					throw new IOException("File already exists [" + tempFile.getName() + "]");
+				}
+				
 				// Get statement from the connection
 				Statement stmt = conn.createStatement();
 				
 				// Execute the query
 				Logger.getLogger(SQLDump.class.getName()).log(Level.INFO, "Executing statment [" + sql + "]");
 				ResultSet rs = stmt.executeQuery(sql);
-				
-				// Init Files
-				if (file == null) {
-					file = new File(Long.toString(System.currentTimeMillis()) + ".csv");
-				}
-				File tempFile = new File(file + ".tmp");
 				
 				// Write to file
 				CSVWriter writer = null;
@@ -83,7 +94,7 @@ public final class SQLDump implements Runnable {
 					writer.writeAll(rs, headers);
 					
 					Logger.getLogger(SQLDump.class.getName()).log(Level.INFO, "Renaming file [" + tempFile + "] to [" + file + "]");
-					tempFile.renameTo(file);
+					FileUtils.moveFile(tempFile, file);
 				} catch (IOException ioe) {
 					Logger.getLogger(SQLDump.class.getName()).log(Level.SEVERE, "Error writing to file", ioe);
 				} finally {
@@ -100,7 +111,8 @@ public final class SQLDump implements Runnable {
 			}
 		} catch (SQLException sqle) {
 			Logger.getLogger(SQLDump.class.getName()).log(Level.SEVERE, "Database connection failed", sqle);
-			return;
+		} catch (IOException ioe) {
+			Logger.getLogger(SQLDump.class.getName()).log(Level.SEVERE, "IO Error", ioe);
 		} finally {
 			// Close database connection
 			try {
