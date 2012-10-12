@@ -1,7 +1,7 @@
 SQLDump
 =======
 
-[Download SQLDump-0.2.jar](https://github.com/downloads/aparsons/SQLDump/SQLDump-0.2.jar)
+[Download SQLDump-0.3.jar](https://github.com/downloads/aparsons/SQLDump/SQLDump-0.3.jar)
 
 Command line utility to execute SQL queries and export results to a CSV file
 
@@ -11,7 +11,7 @@ Usage
 -----
 
 ```java
-java -jar SQLDump-0.2.jar -url [jdbc:oracle:thin:@hostname:port:sid] -user [username] -pass [password] -sql [query]
+java -jar SQLDump-0.3.jar -url [jdbc:oracle:thin:@hostname:port:sid] -user [username] -pass [password] -sql [query]
 ```
 Remember to enclose your SQL query with quotes!
 
