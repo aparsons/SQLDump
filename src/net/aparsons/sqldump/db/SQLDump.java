@@ -57,8 +57,7 @@ public final class SQLDump implements Runnable {
 			if (file.exists()) throw new FileExistsException("File already exists [" + file.getName() + "]");
 			
 			File tempFile = new File(file + ".tmp");
-			if (file.exists()) throw new FileExistsException("File already exists [" + tempFile.getName() + "]");
-
+			if (tempFile.exists()) throw new FileExistsException("File already exists [" + tempFile.getName() + "]");
 			
 			Connection conn = null;
 			Statement stmt = null;
