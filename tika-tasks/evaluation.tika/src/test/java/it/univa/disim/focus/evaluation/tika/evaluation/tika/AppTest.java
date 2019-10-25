@@ -1,38 +1,44 @@
 package it.univa.disim.focus.evaluation.tika.evaluation.tika;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import static org.junit.Assert.assertNotNull;
+import java.io.IOException;
+import org.apache.tika.exception.TikaException;
+import org.junit.Test;
+import org.xml.sax.SAXException;
 
 /**
  * Unit test for simple App.
  */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
-    }
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
+public class AppTest {
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
-    }
+	final static String _DocFile = "doc.docx";
+
+	
+	@Test
+	public void testGenericFile() throws IOException, SAXException, TikaException {
+		assertNotNull(App.parseToStringExample(_DocFile));
+	}
+
+	@Test
+	public void testDectecType() throws IOException, SAXException, TikaException {
+		assertNotNull(App.detectType(_DocFile));
+	}
+
+	@Test
+	public void testAutoParse() throws IOException, SAXException, TikaException {
+		assertNotNull(App.autoParse(_DocFile));
+	}
+
+	@Test
+	public void testExtractMetadata() throws IOException, SAXException, TikaException {
+		assertNotNull(App.extractMetadata(_DocFile));
+	}
+
+	@Test
+	public void testLanguageIdentifier() throws IOException, SAXException, TikaException {
+		String text = App.parseToStringExample(_DocFile);
+		assertNotNull(App.languageIdentifier(text));
+	}
+
 }

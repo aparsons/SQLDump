@@ -20,33 +20,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-
 /**
  * Hello world!
  *
  */
 public class App {
 	final static Logger logger = LoggerFactory.getLogger(App.class);
-	final static String _DocFile = "doc.docx";
-
-	public static void main(String[] args) {
-		logger.info("Hello World!");
-		try {
-			logger.info(parseToStringExample(_DocFile));
-			logger.info(detectType(_DocFile));
-			logger.info(autoParse(_DocFile));
-			logger.info(extractMetadata(_DocFile));
-			logger.info(languageIdentifier(parseToStringExample(_DocFile)));
-		} catch (IOException e) {
-			logger.info("1) {}", e.getMessage());
-		} catch (SAXException e) {
-			logger.info("2) {}", e.getMessage());
-		} catch (TikaException e) {
-			logger.info("3) {}", e.getMessage());
-		} catch (Exception e) {
-			logger.info("4) {}", e.getMessage());
-		}
-	}
 
 	public static String parseToStringExample(String path) throws IOException, SAXException, TikaException {
 		Tika tika = new Tika();
@@ -89,10 +68,10 @@ public class App {
 			return sb.toString();
 		}
 	}
-	
-	public static String languageIdentifier(String text)throws IOException, SAXException, TikaException {
-	      LanguageDetector identifier = new OptimaizeLangDetector().loadModels();
-	      LanguageResult language = identifier.detect(text);
-	      return language.getLanguage();
-	   }
+
+	public static String languageIdentifier(String text) throws IOException, SAXException, TikaException {
+		LanguageDetector identifier = new OptimaizeLangDetector().loadModels();
+		LanguageResult language = identifier.detect(text);
+		return language.getLanguage();
+	}
 }
