@@ -19,94 +19,83 @@ import org.apache.commons.cli.ParseException;
 public class Launcher {
 
 	/**
-	 * Retrieves available command line options
+	 * Generate apache-cli options:
+	 *  DB protocol (Mandatory), 
+	 *  address (Mandatory),
+	 *  user (Mandatory),
+	 *  username (Mandatory),
+	 *  password (Mandatory), 
+	 *  query (Mandatory),
+	 *  CSV file path
+	 *  includeHeaders
+
 	 * 
 	 * @return Available command line options
 	 */
 	public static Options getOptions() {
 		final Options options = new Options();
 		
-		// Required 
+		 
 		final Option urlOption = new Option("url", true, "A database url of the form jdbc:subprotocol:subname");
-		final Option userOption = new Option("user", "username" , true, "The database user on whose behalf the connection is being made");
-		final Option passOption = new Option("pass", "password" , true, "The user's password");
-		final Option sqlOption = new Option("sql", "query" , true, "Any SQL statement");
-		
-		// Optional
-		final Option fileOption = new Option("f", "file", true, "File path of the report");
-		final Option headersOption = new Option("headers","include-headers", false, "Include column headers in generated file");
-		//final Option verboseOption = new Option("v", "verbose", true, "Be extra verbose");
 		
 		final OptionGroup urlGroup = new OptionGroup();
 		urlGroup.setRequired(true);
 		urlGroup.addOption(urlOption);
 		options.addOptionGroup(urlGroup);
-		
-		final OptionGroup userGroup = new OptionGroup();
-		userGroup.setRequired(true);
-		userGroup.addOption(userOption);
-		options.addOptionGroup(userGroup);
-		
-		final OptionGroup passGroup = new OptionGroup();
-		passGroup.setRequired(true);
-		passGroup.addOption(passOption);
-		options.addOptionGroup(passGroup);
-		
-		final OptionGroup sqlGroup = new OptionGroup();
-		sqlGroup.setRequired(true);
-		sqlGroup.addOption(sqlOption);
-		options.addOptionGroup(sqlGroup);
+		//Complete the option specification code 
+		//HERE
+		//
 
-		options.addOption(fileOption);
-		options.addOption(headersOption);
-		// TODO Add verbose option
-		
 		return options;
 	}
-	
+
 	/**
+	 * Main method parse the command line parameters and call the businees logic
 	 * @param args Command line arguments
+	 * @throws Exception 
 	 */
 	public static void main(String[] args) {
 		try {
 			CommandLineParser parser = new GnuParser();
-			try {
-				CommandLine cmdLine = parser.parse(getOptions(), args);
-				
-				if (cmdLine.hasOption("url") && cmdLine.hasOption("username") && cmdLine.hasOption("password") && cmdLine.hasOption("sql")) {
-					String url = cmdLine.getOptionValue("url");					
-					String username = cmdLine.getOptionValue("username");
-					String password = cmdLine.getOptionValue("password");
-					String sql = cmdLine.getOptionValue("sql");
-					
-					String[] urlArray = url.split(":");
-					SQLDump dump = new SQLDump(Connector.valueOf(urlArray[1].toUpperCase()) ,url, username, password, sql);
-					
-					if (cmdLine.hasOption("file")) {
-						dump.setFile(new File(cmdLine.getOptionValue("file")));
-					}
-					
-					if (cmdLine.hasOption("include-headers")) {
-						dump.setHeaders(true);
-					}
-					
-					dump.run();
-				}
-			} catch (ParseException pe) {
-				Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, "Invalid command-line parameter", pe);
-				printUsage();
-			}
-		} catch (Throwable t) {
-			Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, "Error", t);
+			CommandLine cmdLine = parser.parse(getOptions(), args);
+			if(!cmdLine.hasOption("url")) throw new ParseException("No url is specifified");
+			String url = cmdLine.getOptionValue("url");
+			
+			//Complete the parameter parser code 
+			//HERE
+			//
+			
+			String username = "";
+			String password = "";
+			String sql = "";
+			String file = "";
+			String protocol = "";
+			boolean includeHeaders = false;
+			businessLogic(protocol, url, username, password, sql, file, includeHeaders);
+		} catch (ParseException pe) {
+			printUsage();
 		}
-
 	}
-	
+	/**
+	 * Invoke the business logic
+	 */
+	private static void businessLogic(String protocol, String url, String username, String password, String sql, String file, boolean includeHeaders) {
+		SQLDump dump = new SQLDump(Connector.valueOf(protocol), url, username, password, sql);
+		if (!file.isEmpty())
+			dump.setFile(new File(file));
+		if (includeHeaders) 
+			dump.setHeaders(true);
+		dump.run();
+	}
+
 	/**
 	 * Prints the command line options to the console
 	 */
 	public static void printUsage() {
-		new HelpFormatter().printHelp("java -jar SQLDump-" + SQLDump.VERSION + ".jar -url [arg] -user [arg] -pass [arg] -sql [arg]", getOptions());
+		HelpFormatter printer = new HelpFormatter();
+		//Complete the helper code 
+		//HERE
+		//
 	}
 
 }
