@@ -1,6 +1,8 @@
 package jsoup_example.jsoup_example;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -22,54 +24,67 @@ public class App {
 	
 
 	/*
-	 * Complete the method - scrape tuttojuve mobile website and select all
-	 * thumbnails from "CALIOMERCATO" news. Print the results on the console
+	 * Complete the method - scrape a simple mobile website page amd select all news belong to "calciomercato" category
 	 * Use a timeout when Jsoup connects.
 	 */
-	public static void tuttojuveImages() throws IOException {
-		String url = "https://m.tuttojuve.com/";
+	public static int getCalciomercatoNews() throws IOException {
+		String url = "https://mdegroup.github.io/FOCUS-Appendix/tuttojuve.htm";
 		Document document = Jsoup.connect(url).get();
-		Elements images = document.select("img[src~=(?i)\\.(png|jpe?g|gif)]");
+		Elements images = document.select(".list-item");
 		images.parents();
-		for (Element element : images) {
-			System.out.println(element);
+		int count = 0;
+		for (Element image : images) {
+			if (image.getElementsByClass("list-date-data").get(0).text().toLowerCase().contains("calciomercato")) count ++;
 		}
+		return count;	
 	}
+
 	/*
-	 * Complete the method - scrape and modify vocegiallorossa mobile website: add a 2
-	 *  fake news: one on top of the list and one to the bottom and store the new document as a 
-	 *  file.
+	 * Scrape livescore web site: extract the list of
+	 * away teams that won the match and print them to the console.
+	 * Use "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)" as user agent string
 	 */
-//	
-	public static void voceGiallorossa() throws IOException {
-		String url = "https://m.vocegiallorossa.it/";
-		Document document = Jsoup.connect(url).get();
-		Elements news = document.getElementsByClass("list");
-		news.append("<a>news</a>");
-		news.prepend("");
-		
-	}
-	/*
-	 * Complete the method - scrape livescore web site: please extract the name of
-	 * away teams that wons the match and print them to the console.
-	 */
-	public static void livescoreTask() throws IOException {
-		String url = "https://www.livescore.com/";
+	public static List<String> getScoresFromLivescore() throws IOException {
+		String url = "https://mdegroup.github.io/FOCUS-Appendix/livescore.html";
 		Document document = Jsoup.connect(url).get();
 		Elements scores = document.getElementsByClass("sco");
 		scores.parents();
+		
+		List<String> result = new ArrayList();
+//		for (Element score : scores) {
+//			try {
+//			if (Integer.parseInt(score.getElementsByClass("awy").text()) > Integer.parseInt(score.getElementsByClass("hom").text()))
+//				result.add(score.parent().select("div.ply.name").get(1).text());
+//			} catch (NumberFormatException e) {
+//				
+//			}
+//		}
+		return result;
+		
 	}
 	
 	/*
-	 * Complete the method - scrape meteo.it web site: please collect the 
-	 * different weather icons in the map of Abruzzo and print them to the console.
-	 * (suggestions search for <use xlink:href="#meteo_18"></use> where
-	 * xlink:href is the type of the weather).
+	 * Scrape meteo.it web site: collect the 
+	 * different weather icons paths in the map of Abruzzo 
+	 * and print them to the console.
 	 */
-	public static void meteo() throws IOException {
-		String url = "https://www.meteo.it/meteo/abruzzo//";
+	public static String getCityWheater() throws IOException {
+		String url = "https://mdegroup.github.io/FOCUS-Appendix/meteo.html";
 		Document document = Jsoup.connect(url).get();
-		Elements meteo = document.select("use");
+		Elements weathers = document.select("span.dayDate");
+		String name = "";
+		
+//		int difference = 0;
+//		for (Element weather : weathers ) {
+//			Elements elements = weather.parent().parent().parent().getElementsByClass("temperature");
+//			int min = Integer.parseInt(elements.get(0).text().replace("°", ""));
+//			int max = Integer.parseInt(elements.get(1).text().replace("°", ""));
+//			if (Math.abs(max-min)>difference) {
+//				difference = Math.abs(max-min);
+//				name = weather.text();
+//			}
+//		}
+		return(name);
 	}
 	
 
