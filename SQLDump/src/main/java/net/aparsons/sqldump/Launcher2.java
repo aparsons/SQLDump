@@ -16,7 +16,7 @@ import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-public class Launcher {
+public class Launcher2 {
 
 	/**
 	 * Generate apache-cli options:
@@ -42,15 +42,10 @@ public class Launcher {
 		urlGroup.setRequired(true);
 		urlGroup.addOption(urlOption);
 		options.addOptionGroup(urlGroup);
-		//Complete the option specification code 
-		//HERE
-		//
-
 		return options;
 	}
-
 	/**
-	 * Main method parse the command line parameters and call the businees logic
+	 * Main method parse the command line parameters and call the business logic
 	 * @param args Command line arguments
 	 * @throws Exception 
 	 */
@@ -58,22 +53,19 @@ public class Launcher {
 		try {
 			CommandLineParser parser = new GnuParser();
 			CommandLine cmdLine = parser.parse(getOptions(), args);
-			if(!cmdLine.hasOption("url")) throw new ParseException("No url is specifified");
+			if(!cmdLine.hasOption("url")) 
+				throw new ParseException("No url is specifified");
 			String url = cmdLine.getOptionValue("url");
-			
-			//Complete the parameter parser code 
-			//HERE
-			//
-			
-			String username = "";
-			String password = "";
-			String sql = "";
-			String file = "";
-			String protocol = "";
-			boolean includeHeaders = false;
-			businessLogic(protocol, url, username, password, sql, file, includeHeaders);
+			if(!cmdLine.hasOption("query")) 
+				throw new ParseException("No url is specifified");
+			String query = cmdLine.getOptionValue("query");			
+			businessLogic(url, query);
 		} catch (ParseException pe) {
-			printUsage();
+			Options opts = new Options();
+			opts.addOption("url",true,"MySql url");
+			opts.addOption("query",true,"SQL query");
+			HelpFormatter printer = new HelpFormatter();
+			printer.printHelp("SQLDump usage", opts);
 		}
 	}
 	/**
@@ -87,15 +79,9 @@ public class Launcher {
 			dump.setHeaders(true);
 		dump.run();
 	}
-
-	/**
-	 * Prints the command line options to the console
-	 */
-	public static void printUsage() {
-		HelpFormatter printer = new HelpFormatter();
-		//Complete the helper code 
-		//HERE
-		//
+	private static void businessLogic(String protocol, String url) {
+	
 	}
+
 
 }

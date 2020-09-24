@@ -24,8 +24,8 @@ public class App {
 	
 
 	/*
-	 * Complete the method - scrape a simple mobile website page amd select all news belong to "calciomercato" category
-	 * Use a timeout when Jsoup connects.
+	 * Scrape a simple mobile website page and count all news belong to "calciomercato" category
+	 * Extract the required information from https://mdegroup.github.io/FOCUS-Appendix/tuttojuve.htm
 	 */
 	public static int getCalciomercatoNews() throws IOException {
 		String url = "https://mdegroup.github.io/FOCUS-Appendix/tuttojuve.htm";
@@ -33,20 +33,21 @@ public class App {
 		Elements images = document.select(".list-item");
 		images.parents();
 		int count = 0;
-		for (Element image : images) {
-			if (image.getElementsByClass("list-date-data").get(0).text().toLowerCase().contains("calciomercato")) count ++;
-		}
+//		for (Element image : images) {
+//			if (image.getElementsByClass("list-date-data").get(0).text().toLowerCase().contains("calciomercato")) count ++;
+//		}
 		return count;	
 	}
 
 	/*
 	 * Scrape livescore web site: extract the list of
 	 * away teams that won the match and print them to the console.
-	 * Use "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)" as user agent string
+	 * Use "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)" as user agent string.
+	 * Extract the required information from https://mdegroup.github.io/FOCUS-Appendix/livescore.html
 	 */
-	public static List<String> getScoresFromLivescore() throws IOException {
+	public static List<String> getWinningAwayTeams() throws IOException {
 		String url = "https://mdegroup.github.io/FOCUS-Appendix/livescore.html";
-		Document document = Jsoup.connect(url).get();
+		Document document = Jsoup.connect(url)/*.userAgent("Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)")*/.get();
 		Elements scores = document.getElementsByClass("sco");
 		scores.parents();
 		
@@ -60,15 +61,14 @@ public class App {
 //			}
 //		}
 		return result;
-		
 	}
 	
 	/*
-	 * Scrape meteo.it web site: collect the 
-	 * different weather icons paths in the map of Abruzzo 
-	 * and print them to the console.
+	 * Scrape a weather web site: returns the name of the day (i.e., "Martedì 29")
+	 * that has the bigger temperature difference.
+	 * Extract the required information from https://mdegroup.github.io/FOCUS-Appendix/meteo.html
 	 */
-	public static String getCityWheater() throws IOException {
+	public static String getDayWithBiggerTemperatureDifference() throws IOException {
 		String url = "https://mdegroup.github.io/FOCUS-Appendix/meteo.html";
 		Document document = Jsoup.connect(url).get();
 		Elements weathers = document.select("span.dayDate");
