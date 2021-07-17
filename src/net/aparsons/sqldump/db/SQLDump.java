@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
 
-import au.com.bytecode.opencsv.CSVWriter;
+import com.opencsv.CSVWriter;
 
 import net.aparsons.sqldump.db.Connectors.Connector;
 
