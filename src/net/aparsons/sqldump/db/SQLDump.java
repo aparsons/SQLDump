@@ -15,6 +15,9 @@ import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
 
 import com.opencsv.CSVWriter;
+import com.opencsv.CSVWriterBuilder;
+import com.opencsv.ICSVWriter;
+import com.opencsv.ResultSetHelperService;
 
 import net.aparsons.sqldump.db.Connectors.Connector;
 
@@ -78,9 +81,14 @@ public final class SQLDump implements Runnable {
 					rs = stmt.executeQuery(sql);
 					
 					// Write to file
-					CSVWriter writer = null;
+					ICSVWriter writer = null;
 					try {
-						writer = new CSVWriter(new FileWriter(tempFile));
+						// writer = new CSVWriter(new FileWriter(tempFile));
+            ResultSetHelperService service = new ResultSetHelperService();
+            service.setDateFormat("YYYY-MM-DD");
+            service.setDateTimeFormat("YYYY-MM-DD hh:mm:ss");
+            CSVWriterBuilder builder = new CSVWriterBuilder(new FileWriter(tempFile));
+            writer = builder.withResultSetHelper(service).build();
 						
 						Logger.getLogger(SQLDump.class.getName()).log(Level.INFO, "Writing to temporary file [" + tempFile + "]");
 						writer.writeAll(rs, headers);
